@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScanVogue — Recenziile bune ajung publice. Cele proaste ajung la tine.</title>
+<meta name="description" content="Stand QR premium + platformă: dirijează clienții mulțumiți spre Google și pe cei nemulțumiți spre tine, privat, cu răspuns sugerat de AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500;1,600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B0A08;
+    --bg-alt:#0e0c09;
+    --card:#151310;
+    --card-hover:#1a160d;
+    --border:rgba(198,161,91,.16);
+    --border-strong:rgba(198,161,91,.35);
+    --gold:#C6A15B;
+    --gold-bright:#E8D2A0;
+    --gold-dim:#8a7443;
+    --text:#F5F0E6;
+    --text-dim:#9C9382;
+    --text-faint:#6B6558;
+    --sage:#8FD3A0;
+    --rose:#E0A88C;
+    --sapphire:#7FA0C4;
+    --serif:'Cormorant Garamond', 'Times New Roman', serif;
+    --sans:'Manrope', -apple-system, sans-serif;
+    --container:1180px;
+    --ease:cubic-bezier(.16,.8,.24,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;}
+  }
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';
+    position:fixed; inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size:3px 3px;
+    pointer-events:none;
+    z-index:1;
+    opacity:.5;
+  }
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  img,svg{display:block;}
+  ::selection{background:var(--gold); color:#0a0908;}
+  :focus-visible{outline:2px solid var(--gold-bright); outline-offset:3px;}
+
+  .container{max-width:var(--container); margin:0 auto; padding:0 32px;}
+  @media (max-width:640px){.container{padding:0 20px;}}
+
+  .eyebrow{
+    font-family:var(--sans); font-weight:700; font-size:11px;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--gold);
+    display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:''; width:16px; height:1px; background:var(--gold-dim);}
+
+  h1,h2,h3{font-family:var(--serif); font-weight:500; letter-spacing:-.01em; color:var(--text);}
+  h2{font-size:clamp(30px,4vw,46px); line-height:1.12;}
+  em{font-style:italic; color:var(--gold-bright); font-weight:500;}
+  p{color:var(--text-dim);}
+
+  section{position:relative; padding:110px 0; z-index:2; scroll-margin-top:100px;}
+  @media (max-width:768px){section{padding:72px 0;}}
+  .divider{height:1px; background:linear-gradient(90deg, transparent, var(--border-strong), transparent);}
+
+  .reveal{opacity:0; transform:translateY(22px); transition:opacity .8s var(--ease), transform .8s var(--ease);}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* Buttons */
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    font-family:var(--sans); font-weight:700; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    padding:17px 30px; border-radius:3px; border:1px solid transparent;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease), border-color .35s var(--ease);
+    white-space:nowrap;
+  }
+  .btn svg{width:14px; height:14px; transition:transform .3s var(--ease);}
+  .btn:hover svg{transform:translateX(3px);}
+  .btn-gold{background:linear-gradient(135deg, var(--gold-bright), var(--gold)); color:#181209; box-shadow:0 10px 30px -12px rgba(201,169,98,.55);}
+  .btn-gold:hover{transform:translateY(-2px); box-shadow:0 16px 34px -12px rgba(201,169,98,.7);}
+  .btn-outline{background:transparent; color:var(--text); border-color:var(--border-strong);}
+  .btn-outline:hover{border-color:var(--gold); background:rgba(201,169,98,.06); transform:translateY(-2px);}
+  .btn-ghost{background:transparent; color:var(--text-dim); border-color:var(--border); font-size:11.5px; padding:10px 16px;}
+  .btn-ghost:hover{color:var(--gold-bright); border-color:var(--border-strong);}
+  .btn:disabled{opacity:.55; cursor:default; transform:none !important;}
+
+  /* ===== NAV ===== */
+  header{position:fixed; top:0; left:0; right:0; z-index:100; transition:background .4s var(--ease), border-color .4s var(--ease), padding .4s var(--ease);
+    padding:26px 0; border-bottom:1px solid transparent;}
+  header.scrolled{background:rgba(10,9,8,.82); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px); border-color:var(--border); padding:16px 0;}
+  nav{display:flex; align-items:center; justify-content:space-between;}
+  .logo{display:flex; align-items:center; gap:11px; font-family:var(--sans); font-weight:800; letter-spacing:.24em; font-size:15px;}
+  .logo-mark{width:22px; height:22px; position:relative; border:1.4px solid var(--gold); border-radius:3px; display:flex; align-items:center; justify-content:center;}
+  .logo-mark::before{content:''; width:8px; height:8px; background:var(--gold);}
+  .nav-links{display:flex; align-items:center; gap:38px;}
+  .nav-links a{font-size:12.5px; font-weight:600; letter-spacing:.06em; color:var(--text-dim); transition:color .25s;}
+  .nav-links a:hover{color:var(--gold-bright);}
+  .nav-right{display:flex; align-items:center; gap:22px;}
+  .nav-cta{display:none;}
+  @media (min-width:900px){.nav-cta{display:inline-flex; padding:11px 22px; font-size:11px;}}
+  .burger{display:none; width:34px; height:34px; align-items:center; justify-content:center; background:none; border:1px solid var(--border); border-radius:3px;}
+  .burger svg{width:16px; height:16px; color:var(--text);}
+  @media (max-width:899px){.nav-links{display:none;} .burger{display:flex;}}
+
+  .mobile-nav{position:fixed; inset:0; background:rgba(9,8,7,.98); z-index:150; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:34px;
+    opacity:0; pointer-events:none; transition:opacity .35s var(--ease);}
+  .mobile-nav.open{opacity:1; pointer-events:auto;}
+  .mobile-nav a{font-family:var(--serif); font-size:30px; color:var(--text);}
+  .mobile-nav .close-btn{position:absolute; top:26px; right:28px; width:38px; height:38px; border:1px solid var(--border); border-radius:3px; display:flex; align-items:center; justify-content:center; background:none;}
+  .mobile-nav .close-btn svg{width:16px; height:16px; color:var(--text);}
+
+  /* ===== HERO ===== */
+  .hero{padding:180px 0 100px; position:relative; overflow:hidden;}
+  .hero::before{content:''; position:absolute; top:-200px; left:50%; width:900px; height:700px; transform:translateX(-30%);
+    background:radial-gradient(ellipse at center, rgba(201,169,98,.10), transparent 65%); pointer-events:none;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:70px; align-items:center;}
+  @media (max-width:960px){.hero-grid{grid-template-columns:1fr; gap:60px;}}
+  .hero h1{font-size:clamp(38px,5.6vw,64px); line-height:1.08; margin-bottom:26px;}
+  .hero p.lead{font-size:17px; line-height:1.7; max-width:480px; margin-bottom:38px;}
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:30px;}
+  .hero-trust{display:flex; align-items:center; gap:10px; font-size:12px; color:var(--text-faint); letter-spacing:.02em;}
+  .hero-trust .dot{width:5px; height:5px; border-radius:50%; background:var(--sage); box-shadow:0 0 8px var(--sage); flex-shrink:0;}
+
+  /* hero product photo */
+  .stand-wrap{display:flex; align-items:center; justify-content:center;}
+  .hero-img-frame{width:100%; max-width:320px; position:relative; animation:floaty 6s ease-in-out infinite;}
+  @keyframes floaty{0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);}}
+  .hero-img-glow{position:absolute; inset:-14%; background:radial-gradient(ellipse at 50% 40%, rgba(198,161,91,.32), transparent 70%); filter:blur(24px); z-index:0;}
+  .hero-img{position:relative; z-index:1; width:100%; display:block; border-radius:14px; border:1px solid var(--border-strong); box-shadow:0 45px 80px -30px rgba(0,0,0,.85);}
+
+  /* ===== MARQUEE STRIP ===== */
+  .strip{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--bg-alt); display:flex; align-items:stretch; overflow:hidden;}
+  .strip-price{flex-shrink:0; display:flex; align-items:center; gap:14px; padding:18px 32px; border-right:1px solid var(--border); font-family:var(--serif);}
+  .strip-price .amt{font-size:22px; color:var(--gold-bright);}
+  .strip-price .lbl{font-family:var(--sans); font-size:11px; color:var(--text-faint); letter-spacing:.03em; max-width:150px; line-height:1.35;}
+  @media (max-width:640px){.strip-price{padding:16px 18px;} .strip-price .lbl{display:none;}}
+  .marquee{flex:1; display:flex; align-items:center; overflow:hidden; position:relative;}
+  .marquee-track{display:flex; align-items:center; gap:0; white-space:nowrap; animation:scroll-left 32s linear infinite;}
+  .marquee:hover .marquee-track{animation-play-state:paused;}
+  @keyframes scroll-left{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+  .marquee-item{display:flex; align-items:center; gap:28px; padding:0 28px; font-size:12px; letter-spacing:.16em; color:var(--text-faint); font-weight:600;}
+  .marquee-item::after{content:'◆'; color:var(--gold-dim); font-size:8px;}
+
+  /* ===== STATS ===== */
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:56px;}
+  @media (max-width:860px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+  .stat-card{background:var(--bg); padding:38px 30px;}
+  .stat-num{font-family:var(--serif); font-size:44px; color:var(--gold-bright); line-height:1;}
+  .stat-desc{margin-top:14px; font-size:14px; color:var(--text-dim); line-height:1.55; max-width:220px;}
+  .stat-src{margin-top:18px; font-size:10px; letter-spacing:.14em; color:var(--text-faint); font-weight:700; text-transform:uppercase;}
+
+  /* ===== STEPS ===== */
+  .steps-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:56px;}
+  @media (max-width:900px){.steps-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:560px){.steps-grid{grid-template-columns:1fr;}}
+  .step-card{background:var(--bg); padding:34px 28px; transition:background .3s;}
+  .step-card:hover{background:var(--card);}
+  .step-icon{width:34px; height:34px; margin-bottom:26px; color:var(--gold);}
+  .step-icon svg{width:100%; height:100%;}
+  .step-num{font-family:var(--serif); font-size:13px; color:var(--gold-dim); margin-bottom:10px; letter-spacing:.06em;}
+  .step-title{font-family:var(--serif); font-size:21px; margin-bottom:10px; color:var(--text);}
+  .step-desc{font-size:13.5px; color:var(--text-dim); line-height:1.6;}
+
+  /* ===== SECTION HEADER LAYOUT ===== */
+  .sec-head{max-width:640px; margin-bottom:8px;}
+  .sec-two{display:grid; grid-template-columns:.95fr 1.05fr; gap:64px; align-items:start;}
+  @media (max-width:960px){.sec-two{grid-template-columns:1fr; gap:44px;}}
+  .checklist{list-style:none; margin-top:30px; display:flex; flex-direction:column; gap:14px;}
+  .checklist li{display:flex; align-items:flex-start; gap:12px; font-size:14.5px; color:var(--text-dim);}
+  .checklist svg{width:15px; height:15px; color:var(--sage); flex-shrink:0; margin-top:3px;}
+  .hint{display:inline-flex; align-items:center; gap:8px; margin-top:30px; font-size:11px; letter-spacing:.14em; color:var(--gold-dim); font-weight:700; text-transform:uppercase;}
+  .hint svg{width:13px; height:13px;}
+
+  /* ===== DEMO: CLIENT SCAN CARD ===== */
+  .phone-frame{position:relative; max-width:360px; margin:0 auto;}
+  .demo-card{
+    background:linear-gradient(160deg,#151109,#0d0a06); border:1px solid var(--border-strong); border-radius:14px;
+    padding:40px 30px; box-shadow:0 40px 80px -30px rgba(0,0,0,.85); min-height:400px; display:flex; flex-direction:column;
+    position:relative; overflow:hidden;
+  }
+  .demo-card::before{content:''; position:absolute; top:-40%; left:-20%; width:140%; height:80%; background:radial-gradient(ellipse at top, rgba(201,169,98,.14), transparent 65%); pointer-events:none;}
+  .demo-head{text-align:center; margin-bottom:26px; position:relative; z-index:1;}
+  .demo-head h4{font-family:var(--serif); font-size:24px; color:var(--text);}
+  .demo-head span{font-size:10.5px; letter-spacing:.2em; color:var(--text-faint); text-transform:uppercase;}
+  .demo-body{flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px; position:relative; z-index:1;}
+  .demo-choice-btn{
+    width:100%; padding:18px 20px; border-radius:8px; border:1px solid var(--border-strong); background:rgba(255,255,255,.02);
+    color:var(--text); font-family:var(--sans); font-size:13.5px; font-weight:600; text-align:left; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    transition:all .3s var(--ease);
+  }
+  .demo-choice-btn:hover{border-color:var(--gold); background:rgba(201,169,98,.07); transform:translateY(-1px);}
+  .demo-choice-btn svg{width:15px; height:15px; flex-shrink:0; opacity:.7;}
+  .demo-choice-btn.positive{border-color:rgba(131,171,137,.4);}
+  .demo-choice-btn.positive:hover{border-color:var(--sage); background:rgba(131,171,137,.08);}
+  .demo-choice-btn.negative:hover{border-color:var(--rose); background:rgba(192,125,92,.08);}
+  .demo-status{text-align:center; font-size:13px; color:var(--text-dim); display:flex; flex-direction:column; align-items:center; gap:14px; padding:20px 0;}
+  .spinner{width:26px; height:26px; border:2px solid var(--border); border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .demo-form{display:flex; flex-direction:column; gap:10px;}
+  .demo-form input, .demo-form textarea{
+    width:100%; background:rgba(255,255,255,.03); border:1px solid var(--border); border-radius:6px; padding:12px 14px;
+    color:var(--text); font-family:var(--sans); font-size:13px; resize:none;
+  }
+  .demo-form input:focus, .demo-form textarea:focus{border-color:var(--gold); outline:none;}
+  .demo-form input::placeholder, .demo-form textarea::placeholder{color:var(--text-faint);}
+  .demo-check{width:52px; height:52px; border-radius:50%; border:1.5px solid var(--sage); display:flex; align-items:center; justify-content:center; margin:0 auto 18px;}
+  .demo-check svg{width:22px; height:22px; color:var(--sage);}
+  .demo-thanks h5{font-family:var(--serif); font-size:19px; text-align:center; color:var(--text); margin-bottom:10px;}
+  .demo-thanks p{text-align:center; font-size:13px; line-height:1.6; margin-bottom:22px;}
+  .demo-foot{margin-top:20px; text-align:center; position:relative; z-index:1;}
+  .demo-reset{font-size:11px; letter-spacing:.1em; color:var(--text-faint); text-transform:uppercase; font-weight:700; display:inline-flex; align-items:center; gap:6px; background:none; border:none;}
+  .demo-reset:hover{color:var(--gold-bright);}
+  .demo-reset svg{width:12px; height:12px;}
+  .demo-panel-enter{animation:fadein .45s var(--ease);}
+  @keyframes fadein{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+  /* ===== DASHBOARD ===== */
+  .dash{background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-top:56px;}
+  .dash-head{display:flex; align-items:center; justify-content:space-between; padding:26px 30px; border-bottom:1px solid var(--border); flex-wrap:wrap; gap:14px;}
+  .dash-head h4{font-family:var(--serif); font-size:23px;}
+  .dash-logout{font-size:11px; letter-spacing:.1em; color:var(--text-faint); text-transform:uppercase; font-weight:700; display:flex; align-items:center; gap:6px;}
+  .dash-logout svg{width:13px; height:13px;}
+  .dash-section{padding:28px 30px; border-bottom:1px solid var(--border);}
+  .dash-sat{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px;}
+  .dash-sat .label{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); font-weight:700; margin-bottom:8px;}
+  .dash-sat .num{font-family:var(--serif); font-size:40px; color:var(--gold-bright);}
+  .dash-trend{text-align:right; font-size:12px; color:var(--sage); font-weight:700;}
+  .dash-trend span{display:block; color:var(--text-faint); font-weight:500; font-size:11.5px; margin-top:2px;}
+  .dash-stats{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  @media (max-width:760px){.dash-stats{grid-template-columns:repeat(2,1fr);}}
+  .dstat{border:1px solid var(--border); border-radius:6px; padding:18px 18px 16px;}
+  .dstat .n{font-family:var(--serif); font-size:26px;}
+  .dstat .l{font-size:11.5px; color:var(--text-faint); margin-top:4px;}
+  .dstat.blue .n{color:var(--sapphire);} .dstat.green .n{color:var(--sage);} .dstat.rose .n{color:var(--rose);} .dstat.gold .n{color:var(--gold-bright);}
+  .chart-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:14px;}
+  .chart-top h5{font-family:var(--serif); font-size:19px;}
+  .period-toggle{display:flex; gap:4px; background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:3px;}
+  .period-toggle button{padding:7px 15px; font-size:11.5px; font-weight:600; color:var(--text-faint); background:none; border:none; border-radius:4px; transition:all .25s;}
+  .period-toggle button.active{background:var(--gold); color:#181209;}
+  .chart{display:flex; align-items:flex-end; gap:14px; height:180px; padding:0 4px;}
+  .bar-col{flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; height:100%; justify-content:flex-end;}
+  .bar-stack{width:100%; max-width:38px; display:flex; flex-direction:column; justify-content:flex-end; height:100%; gap:2px; border-radius:3px 3px 0 0; overflow:hidden;}
+  .bar-seg{width:100%; transition:height .7s var(--ease);}
+  .bar-seg.pos{background:var(--sage);}
+  .bar-seg.neg{background:var(--rose);}
+  .bar-label{font-size:10.5px; color:var(--text-faint); letter-spacing:.03em;}
+  .themes-row{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;}
+  .themes-row h5{font-family:var(--serif); font-size:19px; margin-bottom:6px;}
+  .themes-row p{font-size:13px;}
+  .themes-panel{margin-top:22px; display:flex; flex-direction:column; gap:12px;}
+  .theme-item{border:1px solid var(--border); border-radius:6px; padding:16px 18px; display:flex; align-items:center; justify-content:space-between; gap:16px;}
+  .theme-item .t{font-size:13.5px; color:var(--text);}
+  .theme-item .c{font-family:var(--serif); font-size:18px; color:var(--gold-bright); flex-shrink:0;}
+  .comp-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; flex-wrap:wrap; gap:14px;}
+  .comp-top h5{font-family:var(--serif); font-size:19px;}
+  .comp-top .sub{font-size:12px; color:var(--text-faint);}
+  .complaint{border:1px solid var(--border); border-radius:8px; padding:22px 24px; margin-bottom:16px; transition:opacity .4s var(--ease), transform .4s var(--ease), max-height .4s var(--ease); overflow:hidden;}
+  .complaint.hidden-c{opacity:0; transform:scale(.97); max-height:0; padding-top:0; padding-bottom:0; margin-bottom:0; border-width:0;}
+  .comp-msg-row{display:flex; align-items:flex-start; justify-content:space-between; gap:14px;}
+  .comp-msg{font-size:14.5px; color:var(--text); line-height:1.5;}
+  .badge{flex-shrink:0; font-size:10px; font-weight:800; letter-spacing:.08em; padding:4px 10px; border-radius:20px; border:1px solid var(--gold); color:var(--gold-bright);}
+  .badge.sent{border-color:var(--sage); color:var(--sage);}
+  .comp-meta{font-size:12px; color:var(--text-faint); margin:10px 0 14px;}
+  .comp-ai{font-size:13px; color:var(--text-dim); margin-bottom:14px;}
+  .comp-ai b{color:var(--gold-bright); font-weight:700;}
+  .comp-reply{width:100%; background:rgba(255,255,255,.025); border:1px solid var(--border); border-radius:6px; padding:14px 16px; color:var(--text); font-family:var(--sans); font-size:13.5px; line-height:1.55; min-height:80px; resize:vertical;}
+  .comp-reply:focus{outline:none; border-color:var(--gold);}
+  .comp-actions{display:flex; gap:10px; margin-top:14px;}
+  .comp-actions .btn{padding:11px 20px; font-size:11px;}
+
+  /* ===== OWNER PANEL ===== */
+  .feat-list{display:flex; flex-direction:column; gap:28px; margin-top:8px;}
+  .feat-item{display:flex; gap:18px;}
+  .feat-icon{width:38px; height:38px; flex-shrink:0; border:1px solid var(--border-strong); border-radius:8px; display:flex; align-items:center; justify-content:center; color:var(--gold);}
+  .feat-icon svg{width:17px; height:17px;}
+  .feat-item h4{font-family:var(--serif); font-size:19px; margin-bottom:6px; font-weight:500;}
+  .feat-item p{font-size:13.5px; line-height:1.6;}
+
+  .panel-img-frame{position:relative; max-width:420px; margin:0 auto;}
+  .panel-img-glow{position:absolute; inset:-10%; background:radial-gradient(ellipse at center, rgba(198,161,91,.20), transparent 70%); filter:blur(20px);}
+  .panel-img{position:relative; z-index:1; width:100%; display:block; border-radius:14px; border:1px solid var(--border-strong); box-shadow:0 40px 80px -28px rgba(0,0,0,.85);}
+
+  /* ===== PRICING ===== */
+  .price-card{
+    max-width:640px; margin:0 auto; background:linear-gradient(160deg, var(--card), #0d0a06); border:1px solid var(--border-strong); border-radius:14px;
+    padding:56px 50px; text-align:center; position:relative; overflow:hidden;
+  }
+  @media (max-width:560px){.price-card{padding:40px 26px;}}
+  .price-card::before{content:''; position:absolute; top:-30%; left:50%; transform:translateX(-50%); width:80%; height:60%; background:radial-gradient(ellipse at center, rgba(201,169,98,.14), transparent 70%);}
+  .price-card > *{position:relative; z-index:1;}
+  .price-amt{font-family:var(--serif); font-size:64px; color:var(--gold-bright); margin:14px 0 6px;}
+  .price-sub{font-size:14px; color:var(--text-dim); margin-bottom:34px;}
+  .price-list{list-style:none; display:flex; flex-direction:column; gap:15px; text-align:left; max-width:400px; margin:0 auto 38px;}
+  .price-list li{display:flex; align-items:flex-start; gap:12px; font-size:14.5px; color:var(--text-dim);}
+  .price-list svg{width:15px; height:15px; color:var(--gold); flex-shrink:0; margin-top:3px;}
+  .price-ctas{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+
+  /* ===== FAQ ===== */
+  .faq-list{display:flex; flex-direction:column; gap:12px; margin-top:44px;}
+  .faq-item{border:1px solid var(--border); border-radius:8px; overflow:hidden; background:var(--bg-alt);}
+  .faq-q{width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:22px 26px; background:none; border:none; text-align:left; font-family:var(--serif); font-size:18px; color:var(--text);}
+  .faq-q svg{width:16px; height:16px; color:var(--gold); flex-shrink:0; transition:transform .35s var(--ease);}
+  .faq-item.open .faq-q svg{transform:rotate(45deg);}
+  .faq-a{max-height:0; overflow:hidden; transition:max-height .4s var(--ease);}
+  .faq-a-inner{padding:0 26px 24px; font-size:14.5px; color:var(--text-dim); line-height:1.65; max-width:620px;}
+
+  /* ===== FINAL CTA ===== */
+  .final-cta{text-align:center; padding:130px 0;}
+  .final-cta h2{margin-bottom:20px;}
+  .final-cta .gold-line{display:block; color:var(--gold-bright); font-style:italic; font-family:var(--serif);}
+  .final-cta p{max-width:520px; margin:0 auto 40px; font-size:15.5px; line-height:1.7;}
+  .final-cta .hero-ctas{justify-content:center;}
+
+  footer{border-top:1px solid var(--border); padding:34px 0; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;}
+  footer .f-logo{font-size:11px; letter-spacing:.2em; color:var(--text-faint); font-weight:700;}
+  footer .f-links{display:flex; gap:26px; font-size:12.5px; color:var(--text-faint);}
+  footer .f-links a:hover{color:var(--gold-bright);}
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="container">
+    <nav>
+      <a href="#top" class="logo"><span class="logo-mark"></span>SCANVOGUE</a>
+      <div class="nav-links">
+        <a href="#cum-functioneaza">Cum funcționează</a>
+        <a href="#demo-client">Demo</a>
+        <a href="#pret">Preț</a>
+        <a href="#faq">Întrebări</a>
+      </div>
+      <div class="nav-right">
+        <a href="https://scanvogue.ro/comanda" class="btn btn-gold nav-cta">Comandă acum</a>
+        <button class="burger" id="burgerBtn" aria-label="Deschide meniul">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="close-btn" id="closeMobileNav" aria-label="Închide meniul"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <a href="#cum-functioneaza">Cum funcționează</a>
+  <a href="#demo-client">Demo</a>
+  <a href="#pret">Preț</a>
+  <a href="#faq">Întrebări</a>
+  <a href="https://scanvogue.ro/comanda" class="btn btn-gold" style="font-family:var(--sans); font-size:13px;">Comandă acum</a>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">Recenzii Google · Stand QR Premium</div>
+        <h1>Recenziile bune ajung <em>publice</em>.<br>Cele proaste ajung <em>la tine</em>.</h1>
+        <p class="lead">ScanVogue e standul QR negru cu auriu, plus platforma din spatele lui. Clientul apasă un singur buton, iar sistemul decide singur: experiența plăcută pleacă spre Google, nemulțumirea ajunge privat în panoul tău, cu răspuns sugerat de AI.</p>
+        <div class="hero-ctas">
+          <a href="https://scanvogue.ro/comanda" class="btn btn-gold">Comandă acum <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a href="#demo-client" class="btn btn-outline">Încearcă demo-ul live</a>
+        </div>
+        <div class="hero-trust"><span class="dot"></span>Plată securizată · factură automată · mockup trimis în 24h</div>
+      </div>
+      <div class="stand-wrap">
+        <div class="hero-img-frame">
+          <div class="hero-img-glow"></div>
+          <img class="hero-img" src="https://plain-eeur-prod-public.komododecks.com/202608/15/JNX8OhH7jbJPhpkIFajV/image.png" alt="Standul QR ScanVogue, negru cu auriu, pe o masă de restaurant">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="strip">
+    <div class="strip-price">
+      <span class="amt">200 lei</span>
+      <span class="lbl">stand personalizat + platformă inclusă</span>
+    </div>
+    <div class="marquee">
+      <div class="marquee-track" id="marqueeTrack"></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <section id="stats">
+    <div class="container">
+      <div class="eyebrow">Ce spun studiile</div>
+      <h2 class="sec-head">Reputația online nu e vanitate. Este cifra ta de afaceri.</h2>
+      <div class="stats-grid">
+        <div class="stat-card reveal"><div class="stat-num" data-target="98" data-suffix="%">0%</div><div class="stat-desc">dintre consumatori citesc recenzii înainte să aleagă un local</div><div class="stat-src">BrightLocal, 2024</div></div>
+        <div class="stat-card reveal"><div class="stat-num" data-target="9" data-suffix="%">0%</div><div class="stat-desc">creștere de venit pentru fiecare stea în plus pe rating</div><div class="stat-src">Harvard Business School</div></div>
+        <div class="stat-card reveal"><div class="stat-num" data-target="88" data-suffix="%">0%</div><div class="stat-desc">au încredere în recenzii la fel ca într-o recomandare personală</div><div class="stat-src">BrightLocal</div></div>
+        <div class="stat-card reveal"><div class="stat-num" data-target="4.5" data-decimals="1" data-suffix="★">0★</div><div class="stat-desc">ratingul minim de la care clienții sună sau rezervă</div><div class="stat-src">Google Consumer Insights</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- HOW IT WORKS -->
+  <section id="cum-functioneaza">
+    <div class="container">
+      <div class="eyebrow">Cum funcționează</div>
+      <h2 class="sec-head">Patru pași, complet automat.</h2>
+      <div class="steps-grid">
+        <div class="step-card reveal">
+          <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/><rect x="18" y="18" width="3" height="3"/><rect x="14" y="18" width="2" height="2"/><rect x="18" y="14" width="2" height="2"/></svg></div>
+          <div class="step-num">01</div><div class="step-title">Clientul scanează</div>
+          <div class="step-desc">Standul stă pe masă. Un scan deschide pagina ta personalizată, fără aplicație și fără cont.</div>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg></div>
+          <div class="step-num">02</div><div class="step-title">Alege în ce fel a fost</div>
+          <div class="step-desc">Două butoane, niciun formular lung: „Am avut o experiență plăcută" sau „Ceva nu a fost pe placul meu".</div>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/></svg></div>
+          <div class="step-num">03</div><div class="step-title">Feedbackul se filtrează</div>
+          <div class="step-desc">Experiență plăcută → direct pe Google. Nemulțumire → mesaj privat către tine, nu în public.</div>
+        </div>
+        <div class="step-card reveal">
+          <div class="step-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4l1.3 3.7L17 9l-3.7 1.3L12 14l-1.3-3.7L7 9l3.7-1.3z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg></div>
+          <div class="step-num">04</div><div class="step-title">AI-ul te ajută să răspunzi</div>
+          <div class="step-desc">Fiecare reclamație vine cu rezumat, marcaj de urgență și o sugestie de răspuns pe care o aprobi tu.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- DEMO CLIENT -->
+  <section id="demo-client">
+    <div class="container sec-two">
+      <div>
+        <div class="eyebrow">Demo live · pagina clientului</div>
+        <h2 class="sec-head">Vezi exact ce vede clientul tău</h2>
+        <p style="margin-top:20px; font-size:15px; line-height:1.7;">Aceasta este pagina reală de scanare. Clientul nu dă note și nu completează formulare lungi: alege între „Am avut o experiență plăcută" și „Ceva nu a fost pe placul meu", iar traseul se ramifică singur.</p>
+        <ul class="checklist">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Experiență plăcută → redirect automat spre pagina ta Google</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Ceva nu a fost în regulă → formular privat, cu nume și email</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Fiecare scanare e înregistrată automat în analytics</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>AI-ul pregătește rezumatul și răspunsul pentru tine</li>
+        </ul>
+        <div class="hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M11 18h2"/></svg>Interacționează cu ecranul din dreapta — chiar funcționează</div>
+      </div>
+      <div class="phone-frame">
+        <div class="demo-card">
+          <div class="demo-head">
+            <h4>Restaurant Aurelia</h4>
+            <span>Herăstrău · București</span>
+          </div>
+          <div class="demo-body" id="demoBody"></div>
+          <div class="demo-foot" id="demoFoot" style="display:none;">
+            <button class="demo-reset" id="demoReset"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 109-9M3 5v5h5"/></svg>Reia demo-ul</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- DEMO MANAGER -->
+  <section id="demo-manager">
+    <div class="container">
+      <div class="eyebrow">Demo live · panoul managerului</div>
+      <h2 class="sec-head">Și acesta e panoul tău, exact așa cum arată</h2>
+      <p style="margin-top:18px; max-width:640px; font-size:15px; line-height:1.7;">Rată de satisfacție, scanări în timp, teme recurente extrase de AI din reclamații și fiecare mesaj privat cu rezumat și răspuns sugerat. Apasă butoanele — chiar funcționează.</p>
+
+      <div class="dash reveal">
+        <div class="dash-head">
+          <h4>Restaurant Aurelia</h4>
+          <span class="dash-logout"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>Delogare</span>
+        </div>
+
+        <div class="dash-section">
+          <div class="dash-sat">
+            <div>
+              <div class="label">Rată satisfacție</div>
+              <div class="num">92%</div>
+            </div>
+            <div class="dash-trend">↑ 34%<span>scanări față de săptămâna trecută</span></div>
+          </div>
+        </div>
+
+        <div class="dash-section">
+          <div class="dash-stats">
+            <div class="dstat blue"><div class="n">1.248</div><div class="l">Scanări totale</div></div>
+            <div class="dstat green"><div class="n">1.081</div><div class="l">Recenzii Google direcționate</div></div>
+            <div class="dstat rose"><div class="n">94</div><div class="l">Experiențe negative</div></div>
+            <div class="dstat gold"><div class="n">3</div><div class="l">Reclamații necitite</div></div>
+          </div>
+        </div>
+
+        <div class="dash-section">
+          <div class="chart-top">
+            <h5>Scanări în timp</h5>
+            <div class="period-toggle" id="periodToggle">
+              <button data-period="zi">Zi</button>
+              <button data-period="saptamana" class="active">Săptămână</button>
+              <button data-period="luna">Lună</button>
+            </div>
+          </div>
+          <div class="chart" id="chartWrap"></div>
+        </div>
+
+        <div class="dash-section">
+          <div class="themes-row">
+            <div>
+              <h5>Teme recurente</h5>
+              <p>Ce se repetă în reclamațiile din ultimele 90 de zile — nu doar mesaje individuale.</p>
+            </div>
+            <button class="btn btn-outline" id="analyzeThemesBtn" style="padding:12px 20px; font-size:11px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/></svg>Analizează temele
+            </button>
+          </div>
+          <div class="themes-panel" id="themesPanel" style="display:none;"></div>
+        </div>
+
+        <div class="dash-section" style="border-bottom:none;">
+          <div class="comp-top">
+            <div><h5>Reclamații (3)</h5><span class="sub">12 rezolvate, ascunse din listă</span></div>
+            <button class="btn btn-ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16"/></svg>Export CSV</button>
+          </div>
+          <div id="complaintsWrap"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container"><div class="divider"></div></div>
+
+  <!-- OWNER PANEL FEATURES -->
+  <section>
+    <div class="container sec-two">
+      <div class="panel-img-frame">
+        <div class="panel-img-glow"></div>
+        <img class="panel-img" src="https://plain-eeur-prod-public.komododecks.com/202608/15/VPmpNuQySSLZVYZTm92J/image.jpg" alt="Client scanând standul QR ScanVogue de pe masa restaurantului">
+      </div>
+      <div>
+        <div class="eyebrow">Panoul proprietarului</div>
+        <h2 class="sec-head">Nu doar un QR. Un sistem întreg.</h2>
+        <div class="feat-list" style="margin-top:34px;">
+          <div class="feat-item">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M7 16l3-5 3 3 5-8"/></svg></div>
+            <div><h4>Analytics pe scanări</h4><p>Scanări pe zi, săptămână, lună sau an, împărțite pe experiențe plăcute și nemulțumiri, plus rata de satisfacție.</p></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L2.5 17a2 2 0 001.7 3h15.6a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></div>
+            <div><h4>Teme recurente</h4><p>AI-ul grupează reclamațiile și îți arată problema care se repetă, pe baza mesajelor reale primite.</p></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+            <div><h4>Răspuns pe email</h4><p>Clientul nemulțumit primește răspunsul tău pe email — recuperat înainte să scrie public.</p></div>
+          </div>
+          <div class="feat-item">
+            <div class="feat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg></div>
+            <div><h4>Control total</h4><p>Nimic nu se trimite automat. Tu aprobi, editezi și decizi exact ce pleacă spre client.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pret">
+    <div class="container">
+      <div class="price-card reveal">
+        <div class="eyebrow" style="justify-content:center;">Un singur preț</div>
+        <div class="price-amt">200 lei</div>
+        <div class="price-sub">stand personalizat, platformă inclusă</div>
+        <ul class="price-list">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Stand acril negru mat, print auriu gravat</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>QR și nume personalizate pentru afacerea ta</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Pagina de scanare pe brandul tău</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Panou cu analytics și analiză AI</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Mockup trimis în 24h, fără abonament ascuns</li>
+        </ul>
+        <div class="price-ctas">
+          <a href="https://scanvogue.ro/comanda" class="btn btn-gold">Comandă acum — plată securizată <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        </div>
+        <p style="margin-top:18px; font-size:12px; color:var(--text-faint);">Plată prin card, factură fiscală emisă automat. Ai întrebări înainte să comanzi? <a href="mailto:dimianic123@gmail.com" style="color:var(--gold-bright); text-decoration:underline;">Scrie-ne</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <div class="eyebrow">Întrebări frecvente</div>
+      <h2 class="sec-head">Ce ne întreabă toți</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q">Este permis de Google?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><div class="faq-a-inner">Da. Regulile Google interzic doar recenziile false sau plătite — ScanVogue nu ascunde și nu falsifică nimic, doar organizează cui i se arată fiecare experiență.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Ce primesc pentru 200 lei?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><div class="faq-a-inner">Standul fizic personalizat, pagina de scanare pe brandul tău și panoul de administrare cu analytics și AI incluse — fără costuri lunare ascunse.</div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q">Cât durează instalarea?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><div class="faq-a-inner">Mockup-ul digital ajunge în 24 de ore. Standul fizic, în câteva zile lucrătoare. Panoul tău e activ din prima zi, chiar înainte să sosească standul.</div></div>
+        </div>
+        <div class="faq-item open">
+          <button class="faq-q">Am nevoie de cunoștințe tehnice?<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+          <div class="faq-a"><div class="faq-a-inner">Niciuna. Standul se pune pe masă, panoul se deschide din browser cu user și parolă.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="container">
+      <h2>Clienții tăi mulțumiți deja există.<span class="gold-line">Doar nu scriu nicăieri.</span></h2>
+      <p>Pune ScanVogue pe masă și transformă fiecare vizită bună într-o recenzie vizibilă, iar fiecare vizită proastă într-o șansă de reparație.</p>
+      <div class="hero-ctas">
+        <a href="https://scanvogue.ro/comanda" class="btn btn-gold">Comandă acum <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#demo-client" class="btn btn-outline">Revezi demo-ul</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+    <span class="f-logo">SCANVOGUE © 2026</span>
+    <div class="f-links">
+      <a href="/confidentialitate">Confidențialitate</a>
+      <a href="mailto:dimianic123@gmail.com">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- Header scroll state ---------- */
+  var header = document.getElementById('siteHeader');
+  function onScroll(){ header.classList.toggle('scrolled', window.scrollY > 40); }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---------- Mobile nav ---------- */
+  var burger = document.getElementById('burgerBtn'), mobileNav = document.getElementById('mobileNav'), closeMobile = document.getElementById('closeMobileNav');
+  burger.addEventListener('click', function(){ mobileNav.classList.add('open'); });
+  closeMobile.addEventListener('click', function(){ mobileNav.classList.remove('open'); });
+  mobileNav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ mobileNav.classList.remove('open'); }); });
+
+  /* ---------- Marquee ---------- */
+  var categories = ['Cofetării','Barbershop','Restaurante','Cafenele','Saloane','Hoteluri','Clinici','Baruri'];
+  var track = document.getElementById('marqueeTrack');
+  var html = categories.map(function(c){ return '<span class="marquee-item">'+c+'</span>'; }).join('');
+  track.innerHTML = html + html;
+
+  /* ---------- Reveal on scroll ---------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reducedMotion){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, {threshold:.15});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  /* ---------- Stat count-up ---------- */
+  var statEls = document.querySelectorAll('.stat-num');
+  function animateCount(el){
+    var target = parseFloat(el.getAttribute('data-target'));
+    var decimals = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    var suffix = el.getAttribute('data-suffix') || '';
+    if(reducedMotion){ el.textContent = target.toFixed(decimals) + suffix; return; }
+    var start = null, duration = 1400;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1-p, 3);
+      var val = target * eased;
+      el.textContent = val.toFixed(decimals) + suffix;
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    var statIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ animateCount(en.target); statIo.unobserve(en.target); } });
+    }, {threshold:.6});
+    statEls.forEach(function(el){ statIo.observe(el); });
+  } else { statEls.forEach(animateCount); }
+
+  /* ---------- Client demo state machine ---------- */
+  var demoBody = document.getElementById('demoBody');
+  var demoFoot = document.getElementById('demoFoot');
+  var demoReset = document.getElementById('demoReset');
+
+  function renderStart(){
+    demoFoot.style.display = 'none';
+    demoBody.innerHTML =
+      '<button class="demo-choice-btn positive" id="choicePos">Am avut o experiență plăcută'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></button>'+
+      '<button class="demo-choice-btn negative" id="choiceNeg">Ceva nu a fost pe placul meu'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9L2.5 17a2 2 0 001.7 3h15.6a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg></button>';
+    document.getElementById('choicePos').addEventListener('click', renderRedirecting);
+    document.getElementById('choiceNeg').addEventListener('click', renderForm);
+  }
+
+  function renderRedirecting(){
+    demoBody.innerHTML = '<div class="demo-status demo-panel-enter"><div class="spinner"></div>Te redirecționăm spre Google Reviews…</div>';
+    setTimeout(renderGoogleMock, 900);
+  }
+
+  function renderGoogleMock(){
+    demoBody.innerHTML =
+      '<div class="demo-thanks demo-panel-enter">'+
+      '<div class="demo-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>'+
+      '<h5>Mulțumim pentru vizită!</h5>'+
+      '<p>Ai fost dus către pagina de Google Reviews a restaurantului, cu recenzia pregătită să fie publicată.</p>'+
+      '</div>';
+    demoFoot.style.display = 'block';
+  }
+
+  function renderForm(){
+    demoBody.innerHTML =
+      '<div class="demo-form demo-panel-enter">'+
+      '<input type="text" placeholder="Numele tău">'+
+      '<input type="email" placeholder="Email">'+
+      '<textarea rows="3" placeholder="Ce nu a fost pe placul tău?"></textarea>'+
+      '<button class="btn btn-gold" id="submitComplaint" style="margin-top:6px; width:100%;">Trimite mesajul</button>'+
+      '</div>';
+    document.getElementById('submitComplaint').addEventListener('click', function(){
+      var btn = this; btn.textContent = 'Se trimite…'; btn.disabled = true;
+      setTimeout(renderThanks, 700);
+    });
+  }
+
+  function renderThanks(){
+    demoBody.innerHTML =
+      '<div class="demo-thanks demo-panel-enter">'+
+      '<div class="demo-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>'+
+      '<h5>Mulțumim, mesajul tău a ajuns la echipa noastră!</h5>'+
+      '<p>Dacă ai lăsat un contact, cineva din echipă îți va răspunde personal în cel mai scurt timp.</p>'+
+      '<a href="#" class="btn btn-outline" style="width:100%; pointer-events:none; opacity:.6;">Lasă și o recenzie publică pe Google ↗</a>'+
+      '</div>';
+    demoFoot.style.display = 'block';
+  }
+
+  demoReset.addEventListener('click', renderStart);
+  renderStart();
+
+  /* ---------- Dashboard chart ---------- */
+  var chartData = {
+    zi: {labels:['9h','11h','13h','15h','17h','19h','21h'], pos:[2,4,6,5,8,10,7], neg:[0,1,0,1,0,1,0]},
+    saptamana: {labels:['08 Aug','09 Aug','10 Aug','11 Aug','12 Aug','13 Aug','14 Aug'], pos:[6,13,10,17,22,19,24], neg:[1,2,2,1,2,3,2]},
+    luna: {labels:['Săpt. 1','Săpt. 2','Săpt. 3','Săpt. 4'], pos:[62,74,68,91], neg:[6,9,7,10]}
+  };
+  var chartWrap = document.getElementById('chartWrap');
+  var maxHeight = 150;
+
+  function renderChart(periodKey){
+    var d = chartData[periodKey];
+    var maxVal = Math.max.apply(null, d.pos.map(function(v,i){ return v + d.neg[i]; }));
+    chartWrap.innerHTML = '';
+    d.labels.forEach(function(label, i){
+      var total = d.pos[i] + d.neg[i];
+      var totalH = Math.max((total / maxVal) * maxHeight, 6);
+      var posH = (d.pos[i] / total) * totalH;
+      var negH = (d.neg[i] / total) * totalH;
+      var col = document.createElement('div');
+      col.className = 'bar-col';
+      col.innerHTML =
+        '<div class="bar-stack" style="height:'+totalH+'px;">'+
+          '<div class="bar-seg neg" style="height:'+negH+'px;"></div>'+
+          '<div class="bar-seg pos" style="height:'+posH+'px;"></div>'+
+        '</div>'+
+        '<div class="bar-label">'+label+'</div>';
+      chartWrap.appendChild(col);
+    });
+  }
+  renderChart('saptamana');
+
+  document.getElementById('periodToggle').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    this.querySelectorAll('button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderChart(btn.getAttribute('data-period'));
+  });
+
+  /* ---------- Recurring themes ---------- */
+  var themesBtn = document.getElementById('analyzeThemesBtn');
+  var themesPanel = document.getElementById('themesPanel');
+  var themesData = [
+    {t:'Timpi de așteptare mari la desert în weekend', c:7},
+    {t:'Zgomot ridicat de la zona de bar seara', c:5},
+    {t:'Recomandări apreciate pentru vinul recomandat de ospătari', c:4}
+  ];
+  var themesLoaded = false;
+  themesBtn.addEventListener('click', function(){
+    if(themesLoaded){ themesPanel.style.display = themesPanel.style.display === 'none' ? 'flex' : 'none'; return; }
+    themesBtn.disabled = true;
+    themesBtn.innerHTML = '<div class="spinner" style="width:14px;height:14px;"></div>Se analizează…';
+    setTimeout(function(){
+      themesPanel.innerHTML = themesData.map(function(th){
+        return '<div class="theme-item demo-panel-enter"><span class="t">'+th.t+'</span><span class="c">'+th.c+'×</span></div>';
+      }).join('');
+      themesPanel.style.display = 'flex';
+      themesBtn.disabled = false;
+      themesBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5z"/></svg>Reanalizează';
+      themesLoaded = true;
+    }, 750);
+  });
+
+  /* ---------- Complaints ---------- */
+  var complaints = [
+    {
+      msg:'Am așteptat aproape 30 de minute pentru desert, iar când a ajuns era greșit. Personalul a fost amabil, dar ne-a stricat seara.',
+      meta:'14 Aug, 21:12 · contact: Andreea M. · andreea.m@email.com',
+      ai:'Întârziere mare la desert și comandă greșită; serviciul a fost totuși politicos.',
+      reply:'Bună, Andreea! Îmi pare sincer rău pentru așteptarea de la desert și pentru comanda greșită — nu așa arată seara pe care ne-o dorim pentru voi. Am discutat deja cu echipa de sală. Ne-ar face plăcere să vă invităm la un desert din partea casei la următoarea vizită.'
+    },
+    {
+      msg:'Mâncarea a fost bună, dar masa de lângă noi avea muzica boxei foarte tare și nu ne-am putut auzi deloc.',
+      meta:'13 Aug, 20:40 · contact: Radu P. · radu.p@email.com',
+      ai:'Nivelul de zgomot din sală a afectat experiența, deși mâncarea a fost apreciată.',
+      reply:'Bună, Radu! Mulțumim că ne-ai spus. Am redus volumul în zona respectivă după ora 20:00 și verificăm setările în fiecare seară. Sperăm să te revedem într-o atmosferă mult mai liniștită.'
+    },
+    {
+      msg:'Rezervarea a fost pentru ora 19, dar masa a fost pregătită abia la 19:25. Restul serii a fost excelent.',
+      meta:'12 Aug, 19:31 · contact: Mihai T. · mihai.t@email.com',
+      ai:'Întârziere de 25 de minute la preluarea rezervării; restul experienței a fost pozitiv.',
+      reply:'Bună, Mihai! Ne cerem scuze pentru întârzierea de la sosire — vom ajusta modul în care pregătim mesele rezervate în avans. Mulțumim că ai rămas și că restul serii a ieșit bine!'
+    }
+  ];
+  var compWrap = document.getElementById('complaintsWrap');
+  complaints.forEach(function(c, idx){
+    var card = document.createElement('div');
+    card.className = 'complaint';
+    card.innerHTML =
+      '<div class="comp-msg-row"><div class="comp-msg">'+c.msg+'</div><span class="badge" data-badge>NOUĂ</span></div>'+
+      '<div class="comp-meta">'+c.meta+'</div>'+
+      '<div class="comp-ai"><b>Rezumat AI:</b> '+c.ai+'</div>'+
+      '<textarea class="comp-reply" data-reply>'+c.reply+'</textarea>'+
+      '<div class="comp-actions">'+
+        '<button class="btn btn-gold" data-send>Trimite răspuns</button>'+
+        '<button class="btn btn-outline" data-hide>Ascunde</button>'+
+      '</div>';
+    compWrap.appendChild(card);
+
+    card.querySelector('[data-send]').addEventListener('click', function(){
+      var badge = card.querySelector('[data-badge]');
+      var reply = card.querySelector('[data-reply]');
+      this.textContent = 'Trimis ✓';
+      this.disabled = true;
+      badge.textContent = 'TRIMIS';
+      badge.classList.add('sent');
+      reply.readOnly = true;
+      reply.style.opacity = '.7';
+    });
+    card.querySelector('[data-hide]').addEventListener('click', function(){
+      card.classList.add('hidden-c');
+    });
+  });
+
+  /* ---------- FAQ accordion ---------- */
+  var faqItems = document.querySelectorAll('.faq-item');
+  function setFaqHeight(item, open){
+    var a = item.querySelector('.faq-a');
+    if(open){ a.style.maxHeight = a.scrollHeight + 'px'; item.classList.add('open'); }
+    else { a.style.maxHeight = '0px'; item.classList.remove('open'); }
+  }
+  faqItems.forEach(function(item){
+    setFaqHeight(item, item.classList.contains('open'));
+    item.querySelector('.faq-q').addEventListener('click', function(){
+      var isOpen = item.classList.contains('open');
+      faqItems.forEach(function(other){ setFaqHeight(other, false); });
+      setFaqHeight(item, !isOpen);
+    });
+  });
+  window.addEventListener('resize', function(){
+    faqItems.forEach(function(item){ if(item.classList.contains('open')) setFaqHeight(item, true); });
+  });
+
+})();
+</script>
+</body>
+</html>
